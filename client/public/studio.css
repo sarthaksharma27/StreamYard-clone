@@ -1,0 +1,146 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: whitesmoke;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+.logo img {
+    max-width: 70px;
+}
+
+.btn{
+    padding: 0;
+}
+
+.btn button {
+    margin-right: 300px;
+    font-family: monospace;
+    background-color: #f3f7fe;
+    color: #3b82f6;
+    border: none;
+    border-radius: 8px;
+    width: 100px;
+    height: 45px;
+    transition: .3s;
+}
+
+.btn button:hover {
+    background-color: #3b82f6;
+    box-shadow: 0 0 0 5px #3b83f65f;
+    color: #fff;
+}
+
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0; 
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+}
+
+.sidebar .brand,
+.sidebar .comment {
+    margin-bottom: 20px;
+}
+
+
+.main {
+    margin-right: 270px; 
+    padding: 20px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .sidebar {
+        right: 0; 
+    }
+
+    .main {
+        margin-right: 0; 
+    }
+}
+
+/* main */
+
+.main .screen{
+    height: 600px;
+    width: 1000px;
+    background-color: black;
+}
+
+.option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f3f7fe;
+    border-radius: 8px;
+    padding: 10px;
+    width: 200px; /* Adjust the width as needed */
+}
+
+.option div {
+    display: flex;
+    align-items: center;
+    margin: 0 10px; /* Adjust the margin as needed */
+    cursor: pointer;
+}
+
+.option i {
+    margin-right: 5px;
+    font-size: 20px;
+    color: #3b82f6;
+}
+
+.option div:hover {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+#controls{
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform:translateX(-50%);
+    display: flex;
+    gap: 1em;
+}
+
+.control-container{
+    background-color: black;
+    padding: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+  
+.control-container img{
+    height: 30px;
+    width: 30px;
+}
+  
+#leave-btn{
+    background-color: rgb(255,80,80, 1);
+}
