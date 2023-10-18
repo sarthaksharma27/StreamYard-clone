@@ -16,9 +16,12 @@
         Log in to your account
       </div>
 
-      <form class="form">
+      <form class="form" action="/" method="post">
         <div class="form-group">
-          <input type="text" id="email" name="email" placeholder="Enter your email" required="">
+          <input type="email" id="email" name="email" placeholder="Enter your email" required="">
+        </div><br>
+        <div class="form-group">
+            <input type="password" id="password" name="password" placeholder="Enter your password" required="">
         </div>
 
         <button class="form-submit-btn" type="submit">Login</button>
@@ -26,7 +29,7 @@
 
       <p class="signup-link">
         New to StreamYard?
-        <a href="#" class="signup-link link"> Create an account.</a>
+        <a href="/register" class="signup-link link"> Create an account.</a>
       </p>
     </div>
   </body>
