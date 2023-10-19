@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StreamYard - Studio</title>
-    <link rel="stylesheet" href="./public/studio.css">
+    <link rel="stylesheet" href="./css/studio.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
 </head>
 <body>
     <div class="top">
         <div class="logo">
-            <img src="./public/images/streamyard-logo.png" alt="streamyard-logo">
+            <img src="./images/streamyard-logo.png" alt="streamyard-logo">
+            <h2><%= title %></h2>
         </div>
         <div class="btn">
             <button>Go Live &#127881;</button>
@@ -27,26 +28,19 @@
         </div>
     </div>    
     <div class="main">
-        <div class="screen">
-            <video class="video-player" id="user-1" autoplay playsinline></video>
+        <div id="videos">
+            <video class="video-player" id="user" autoplay playsinline></video>
         </div>
         <div id="controls">
             <div class="control-container" id="camera-btn">
-                <img src="./public/images/camera.png" />
+                <img src="./images/camera.png" />
             </div>
     
             <div class="control-container" id="mic-btn">
-                <img src="./public/images/mic.png" />
+                <img src="./images/mic.png" />
             </div>
-    
-            <a href="lobby.html">
-                <div class="control-container" id="leave-btn">
-                    <img src="./public/images/phone.png" />
-                </div>
-            </a>
         </div>
-        
     </div>
-    <script type="module" src="/src/main.ts"></script>
+    <script src="./ts/main.js"></script>
 </body>
 </html>

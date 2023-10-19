@@ -1,58 +1,24 @@
-import { PrismaClient } from '@prisma/client';
-import express from 'express';
+import express, { Application } from 'express';
 import path from 'path';
 
-const prisma = new PrismaClient();
-const app = express();
+const app: Application = express();
 
-// Serve static files
-app.use(express.static(path.join(__dirname, '../client')));
+// Middleware
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 
-// Homepage
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/login.html'));
-});
+import { router as authRouter } from './routes/auth';
+import { router as titleRouter } from './routes/title';
 
-// Login
-app.post('/', async (req, res) => {
-    const { email, password } = req.body;
-
-    const user = await prisma.user.findUnique({
-        where: {
-            email,
-        },
-    });
-
-    if (user && user.password === password) {
-        res.sendFile(path.join(__dirname, '../client/home.html'));
-    } else {
-        res.status(401).send('Unauthorized: Invalid email or password');
-    }
-});
-
-// Register Page
-app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/register.html'));
-});
-
-// User Registration
-app.post('/register', async (req, res) => {
-    const { email, password } = req.body;
-
-    await prisma.user.create({
-        data: {
-            email,
-            password,
-        }
-    });
-
-    res.sendFile(path.join(__dirname, '../client/login.html'));
-});
+app.use(authRouter);
+app.use(titleRouter);
 
 // Start the server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+    <link rel="stylesheet" href="./css/style.css">
+  </head>
+  <body>
+    <div class="image">
+      <img id="img" src="./images/streamyard.png" alt="StreamYard">
+    </div>
+    <div class="form-container">
+      <div class="logo-container">
+        Add your title
+      </div>
+
+      <form class="form" action="/title" method="post">
+        <div class="form-group">
+          <input type="text" id="email" name="title" placeholder="Enter your title" required="">
+        </div><br>
+
+        <button class="form-submit-btn" type="submit">Create live stream</button>
+      </form>
+    </div>
+  </body>
+</html>

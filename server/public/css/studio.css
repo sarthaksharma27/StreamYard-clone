@@ -21,6 +21,11 @@ body {
 .logo img {
     max-width: 70px;
 }
+.logo h2 {
+    position: absolute;
+    top: 35px;
+    left: 100px
+}
 
 .btn{
     padding: 0;
@@ -83,10 +88,19 @@ body {
 
 /* main */
 
-.main .screen{
+#videos {
     height: 600px;
     width: 1000px;
+    display: grid;
+    grid-template-columns: 1fr;
     background-color: black;
+    overflow:hidden;
+}
+.video-player{
+    background-color: black;
+    height: 600px;
+    width: 1000px;
+    object-fit: cover;
 }
 
 .option {

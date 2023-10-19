@@ -5,18 +5,18 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
-    <link rel="stylesheet" href="./public/style.css">
+    <link rel="stylesheet" href="./css/style.css">
   </head>
   <body>
     <div class="image">
-      <img id="img" src="./public/images/streamyard.png" alt="StreamYard">
+      <img id="img" src="./images/streamyard.png" alt="StreamYard">
     </div>
     <div class="form-container">
       <div class="logo-container">
-        Create your account
+        Log in to your account
       </div>
 
-      <form class="form" action="/register" method="post">
+      <form class="form" action="/" method="post">
         <div class="form-group">
           <input type="email" id="email" name="email" placeholder="Enter your email" required="">
         </div><br>
@@ -24,12 +24,12 @@
             <input type="password" id="password" name="password" placeholder="Enter your password" required="">
         </div>
 
-        <button class="form-submit-btn" type="submit">Register</button>
+        <button class="form-submit-btn" type="submit">Login</button>
       </form>
 
       <p class="signup-link">
-        Already using StreamYard?
-        <a href="/" class="signup-link link"> Login.</a>
+        New to StreamYard?
+        <a href="/register" class="signup-link link"> Create an account.</a>
       </p>
     </div>
   </body>
