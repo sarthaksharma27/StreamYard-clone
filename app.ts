@@ -13,8 +13,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 import { router as authRouter } from './routes/auth';
 import { router as titleRouter } from './routes/title';
 
+
 app.use(authRouter);
 app.use(titleRouter);
+
+
 
 // Start the server
 const PORT = process.env.PORT || 8000;
