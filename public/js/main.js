@@ -1,7 +1,30 @@
 let localStream;
 const canvas = document.getElementById('canvas');
-let mediaRecorder; // Add a variable for MediaRecorder
+let mediaRecorder;
 const chunks = [];
+let isRecording = false;
+
+const goLiveButton = document.getElementById('golive');
+
+function showStreamingAlert() {
+  window.alert('Streaming has started!');
+}
+
+goLiveButton.addEventListener('click', () => {
+  if (isRecording) {
+    stopRecordingAndSend();
+    if (localStream) {
+      const tracks = localStream.getTracks();
+      tracks.forEach(track => track.stop());
+    }
+    goLiveButton.textContent = 'Start';
+  } else {
+    init();
+    showStreamingAlert();
+    goLiveButton.textContent = 'End';
+  }
+  isRecording = !isRecording;
+});
 
 async function init() {
   try {
@@ -17,12 +40,10 @@ async function init() {
 
     captureAndDrawFrame();
 
-    // Initialize the MediaRecorder with H.264 codec
     mediaRecorder = new MediaRecorder(canvas.captureStream(), {
       mimeType: 'video/webm;codecs=h264',
     });
 
-    // Handle data available from MediaRecorder
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         chunks.push(event.data);
@@ -66,7 +87,6 @@ function initializeWebRTC() {
 function sendDataFrames(dataChannel) {
   mediaRecorder.start();
 
-  // This function will handle the data available event and push the data to the 'chunks' array.
   mediaRecorder.ondataavailable = (event) => {
     if (event.data.size > 0) {
       chunks.push(event.data);
@@ -74,26 +94,35 @@ function sendDataFrames(dataChannel) {
   };
 }
 
-// When you want to stop recording and send the video to the backend
 function stopRecordingAndSend() {
   mediaRecorder.stop();
 
-  // Convert 'chunks' to a Blob
   const h264VideoBlob = new Blob(chunks, { type: 'video/webm;codecs=h264' });
 
-  // Send the Blob to your backend for further processing by FFmpeg
+  // Replace 'http://your-backend-server:8080/upload' with your actual backend URL
   sendToBackend(h264VideoBlob);
 }
 
-// Add event listener for stopping the recording and sending
-document.getElementById('stop-btn').addEventListener('click', stopRecordingAndSend);
-
-// You may need to implement the 'sendToBackend' function to send the Blob to your backend.
+// Implement the logic to send the Blob to your backend (e.g., via AJAX or WebSocket).
 function sendToBackend(blob) {
-  // Implement the logic to send the Blob to your backend (e.g., via AJAX or WebSocket).
+  const xhr = new XMLHttpRequest();
+
+  // Replace with the actual URL of your backend endpoint
+  xhr.open('POST', 'http://your-backend-server:8080', true);
+
+  xhr.onload = function () {
+    if (xhr.status === 200) {
+      console.log('Video sent to backend successfully');
+    } else {
+      console.error('Error sending video to the backend');
+    }
+  };
+
+  xhr.send(blob);
 }
 
 init();
+
 
 let toggleCamera = async () => {
   let videoTrack = localStream.getTracks().find(track => track.kind === 'video')

@@ -1,7 +1,8 @@
 const http = require('http');
 const WebSocket = require('ws');
 const { RTCPeerConnection, RTCSessionDescription } = require('wrtc');
-const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
+const child_process = require('child_process');
 
 const server = http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -9,8 +10,6 @@ const server = http.createServer((req, res) => {
 });
 
 const wss = new WebSocket.Server({ server });
-
-let videoFrames = [];
 
 wss.on('connection', (ws) => {
   console.log('WebSocket client connected');
@@ -39,66 +38,30 @@ wss.on('connection', (ws) => {
 
   ws.on('message', (data) => {
     console.log('Received video frame');
-    videoFrames.push(data);
-    if (videoFrames.length > 0) {
-      setTimeout(() => {
-        decodeAndStreamToYouTubeAndTwitch();
-      }, 5000);
-    }
-  });
-});
 
-function decodeAndStreamToYouTubeAndTwitch() {
-  const input = new ffmpeg();
+    // Save the received video frame to a file (H.264 format)
+    fs.writeFileSync('received-frame.h264', data, { encoding: 'binary' });
 
-  try {
-    videoFrames.forEach((frame) => {
-      // Ensure frame is correctly formatted before adding as input
-      if (frame instanceof ArrayBuffer) {
-        const frameData = new Uint8Array(frame);
-        input.input(frameData);
-      } else {
-        console.error('Invalid frame format');
-      }
+    // Process the received frames using GStreamer
+    const gstProcess = child_process.spawn('gst-launch-1.0', [
+      'filesrc', 'location=received-frame.h264',
+      '!', 'h264parse',
+      '!', 'flvmux', '!', 'rtmpsink', 'location=rtmp://live.twitch.tv/app/live_973388968_yWal4qVyVRWA0a9lI7OK2AIW7QceTh', // Replace with your RTMP server URL
+    ]);
+
+    gstProcess.stdout.on('data', (data) => {
+      console.log('GStreamer stdout:', data.toString());
     });
 
-    input
-      .inputFPS(30)
-      .videoCodec('libx264')
-      .on('end', () => {
-        console.log('Decoding finished');
-        videoFrames = [];
-        try {
-          console.log('Starting stream...');
-          startYouTubeAndTwitchStream();
-        } catch (error) {
-          console.error('Error starting the stream:', error);
-        }
-      })
-      .on('error', (err) => {
-        console.error('Error during decoding:', err);
-      })
-      .output('rtmp://a.rtmp.youtube.com/live2/YOUR_YOUTUBE_STREAM_KEY') // YouTube Stream Key
-      .output('rtmp://live.twitch.tv/app/live/YOUR_TWITCH_STREAM_KEY') // Twitch Stream Key
-      .run();
-  } catch (error) {
-    console.error('Error processing video frames:', error);
-  }
-}
+    gstProcess.stderr.on('data', (data) => {
+      console.error('GStreamer stderr:', data.toString());
+    });
 
-function isValidFrame(frame) {
-  // Implement validation for the frame format here
-  // You may need to check the frame data to ensure it's a valid format.
-  // Return true if it's valid, false otherwise.
-  return true; // Update this based on your frame format validation.
-}
-
-function startYouTubeAndTwitchStream() {
-  // Implement your stream start logic here
-  // This function will be called when decoding finishes
-  // and it's time to start streaming to YouTube and Twitch.
-  console.log('Starting YouTube and Twitch streams...');
-}
+    gstProcess.on('close', (code) => {
+      console.log(`GStreamer process exited with code ${code}`);
+    });
+  });
+});
 
 server.listen(8080, () => {
   console.log('Server is running on http://localhost:8080');
